@@ -1,0 +1,49 @@
+version: 2.1
+
+orbs: 
+  aws-s3: circleci/aws-s3@3.0.0
+
+jobs:
+  build:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:14
+    steps:
+      - checkout
+      - run:
+          name: yarn install
+          command: yarn install
+      - run: 
+          name: yarn build
+          command: yarn build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+      
+  deploy:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:14
+    steps:
+      - attach_workspace: 
+          at: .
+      - aws-s3/sync: 
+          from: ./build
+          to: $BUCKET_URL
+
+workflows:
+  s3-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: 
+                - master
+      - deploy:
+          requires: 
+            - build
+          filters:
+            branches:
+              only: 
+                - master
