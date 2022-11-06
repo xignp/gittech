@@ -43,15 +43,18 @@ const Top: FC = () => {
         search(keyword, currentLanguage, '', 1)
     }
     const search = async (keyword: string, language: Language, sort: string, page: number) => {
-        if (!keyword || Object.keys(language).length === 0) {
-            return
+        try {
+            if (!keyword || Object.keys(language).length === 0) {
+                return
+            }
+            setIsLoading(true)
+            const repositories = await searchRepositories(keyword, language, sort, page)
+            setSearched({ keyword, currentLanguage, sort })
+            setIsLoading(false)
+            setRepositories(repositories)
+        } catch (error) {
+            setIsLoading(false)
         }
-
-        setIsLoading(true)
-        const repositories = await searchRepositories(keyword, language, sort, page)
-        setSearched({ keyword, currentLanguage, sort })
-        setIsLoading(false)
-        setRepositories(repositories)
     }
 
     return (
