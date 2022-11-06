@@ -20,7 +20,7 @@ export const searchRepositories = async (keyword: string, language: Language, so
         }))
 
         return { totalCount, items }
-    } catch (error: any) {
-        return { totalCount: 0, items: [] }
+    } catch (error) {
+        throw error
     }
 }
