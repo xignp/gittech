@@ -15,7 +15,7 @@ const Footer: FC = () => {
                 justifyContent: 'center',
             }}
         >
-            <Typography sx={{ color: '#FFFFFF' }}>(C)SPERAX</Typography>
+            <Typography sx={{ color: '#FFFFFF' }}>github.com/xignp/gittech</Typography>
         </Box>
     )
 }
